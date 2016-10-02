@@ -9,13 +9,21 @@ import time
 # mvs = re.compile(r"\"(?P<title>.*?)\"\s+\((?P<year>199[6-9]+|2\d{2}6)\)\s+(?P<country>\w+):(?P<r_date>.*\d{4})")
 # #mvs2 = re.compile(r"\"(?P<title>.*?)\"\s+\((?P<year>201[4-5]{1})\)\s+(?P<genre>\w+)")
 
+first_relevant_year = 1991
+
 fl = sys.argv[1]  # movie database file
-fl_upd = fl.split(".").insert("_upd.",1)  # file to store processed data
+fl_upd = fl.split(".").insert(1,"_upd.")  # file to store processed data
+print(fl_upd)
 
 start_time = time.time()
 df = pd.read_csv(fl, encoding="utf-8")
+
+print("found {} records (movies) in the database file".format(len(df.index)))
+
+# we only need the movies released since 1991
+df = df[df["title_year" >= first_relevant_year]]
 ndf = len(df.index)
-print("found {} records (movies) in the database file")
+print("removed movies released prior to {}; now have {} movies left".format(first_relevant_year, ndf))
 
 # noticed unprintable characters - remove these
 df["movie_title"] = df["movie_title"].apply(lambda _: "".join([ch for ch in _ if ch in printable]).lower().strip())
@@ -53,6 +61,7 @@ print("found {} release dates and {} taglines".format(len(rd_list), len(tg_list)
 df["rel_date"] = rd_list
 df["tagline"] = tg_list
 
+print("saving the updated database to {}...".format(fl_upd))
 df.to_csv(fl_upd)
 
 end_time = time.time()
