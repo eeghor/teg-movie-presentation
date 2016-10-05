@@ -122,6 +122,6 @@ df["actor_3_sex"] = getSexList(df["actor_3_name"])
 NVARS_NOW = df.shape[1]  # how many variables now
 
 # dump data frame to a new file (again, keep the original!)
-df.to_csv(fl_upd)
+df.to_csv(fl_upd, index=False)
 
 print("done. saved database to {}. there are now {} variables (was {}).".format(fl_upd, NVARS_NOW, NVARS_WAS))

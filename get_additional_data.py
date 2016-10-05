@@ -68,7 +68,7 @@ df["rel_date"] = rd_list
 df["tagline"] = tg_list
 
 # dump data frame to .csv
-df.to_csv(fl_upd)
+df.to_csv(fl_upd, index=False)
 
 end_time = time.time()
 print("done. saved data to {}; elapsed time: {} minutes".format(fl_upd, round((end_time - start_time)/60,1)))
